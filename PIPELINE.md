@@ -59,7 +59,7 @@
 |-------------------|----------|------------|-------|
 | `train.py`        | ~15min   |         | 100   |
 | `train_sub.py`    | ~100min  |        | 150   |
-| `my_bert_match.py` | ~3-6hrs  | <5GB      | 10    |
+| `my_bert_match.py` | ~1d  | <5GB      | 10    |
 
    ```bash
    # produce trained models for CNN model

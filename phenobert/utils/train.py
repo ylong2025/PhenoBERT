@@ -10,7 +10,7 @@ train_file_path="../models/train.txt"
 val_file_path="../models/val.txt"
 test_file_path="../models/test.txt"
 model_save_path="../models/HPOModel_H/model_layer1.pkl"
-device=torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
+device=torch.device("cuda:1") if torch.cuda.is_available() else torch.device("cpu")
 
 
 

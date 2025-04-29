@@ -4,7 +4,7 @@ import torch.nn.init as init
 import torch.nn.functional as F
 import numpy as np
 
-device=torch.device("cuda:0" if torch.cuda.is_available() else torch.device("cpu"))
+device=torch.device("cuda:1" if torch.cuda.is_available() else torch.device("cpu"))
 
 class PhraseMatch_SiamLSTM(nn.Module):
     def __init__(self, num_layer, hidden_size, embedding_dim):

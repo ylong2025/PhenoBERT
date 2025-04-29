@@ -121,7 +121,7 @@ def train():
     # 注意这里是表明分的类数
     model = BertForSentenceMatching(embed, 3)
     if torch.cuda.is_available():
-        model = _move_model_to_device(model, device=0)
+        model = _move_model_to_device(model, device=3)
     # print(model)
     train_batch=DataSetIter(batch_size=16,dataset=train_set,sampler=None)
     optimizer = torch.optim.Adam(model.parameters(), lr=2e-5)

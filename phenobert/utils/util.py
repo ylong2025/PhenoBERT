@@ -21,7 +21,7 @@ stopwords_file_path = project_path + "../data/stopwords.txt"
 num2word_file_path = project_path + "../data/NUM.txt"
 cnn_model_path = project_path + "../models/HPOModel_H/model_layer1.pkl"
 bert_model_path = project_path + "../models/bert_model_max_triple.pkl"
-device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device("cpu"))
+device = torch.device("cuda:1" if torch.cuda.is_available() else torch.device("cpu"))
 wnl = WordNetLemmatizer()
 
 class HPO_class:
@@ -557,7 +557,7 @@ class HPOTree:
 
         indices = np.array(sparse_indexes)
         A = ss.coo_matrix((np.array(sparse_values), (indices[:, 0], indices[:, 1])),
-                          shape=(num_nodes, num_nodes), dtype=np.float)
+                          shape=(num_nodes, num_nodes), dtype=np.float32)
         return A.tocoo()
 
     def getAdjacentMatrixAncestorsAssist(self, ancestors_weight, concept_id, hpo2idx, idx2hpo):

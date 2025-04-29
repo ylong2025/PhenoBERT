@@ -1,7 +1,10 @@
 # PhenoBERT
+
  ![logo](https://github.com/EclipseCN/PhenoBERT/blob/main/phenobert/img/logo.jpg) 
 
 A combined deep learning method for automated recognition of human phenotype ontology
+
+📌 **Updated Training Pipeline**: See [PIPELINE.md](PIPELINE.md) for the latest training workflow.
 
 [![Build Status](https://travis-ci.com/EclipseCN/PhenoBERT.svg?branch=main)](https://travis-ci.com/EclipseCN/PhenoBERT) ![Python](https://img.shields.io/badge/python->=3.6-blue)
 

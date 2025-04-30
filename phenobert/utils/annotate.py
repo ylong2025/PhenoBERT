@@ -45,8 +45,17 @@ fasttext_model = fasttext.load_model(fasttext_model_path)
 loader = ModelLoader()
 
 clinical_ner_model = stanza.Pipeline('en', package='mimic', processors={'ner': 'i2b2'}, verbose=False)
+
+# clinical_ner_model = stanza.Pipeline('en', 
+#                                     processors={'ner': 'i2b2'}, 
+#                                     verbose=False,
+#                                     model_dir='../stanza-en',
+#                                     download_method=stanza.DownloadMethod.NONE)
+
 cnn_model = loader.load_all(cnn_model_path)
+cnn_model.to(device)
 bert_model = loader.load_all(bert_model_path)
+bert_model.to(device)
 
 corpus_dir_path=args.dir_in
 predict_dir_path=args.dir_out

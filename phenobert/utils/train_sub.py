@@ -17,7 +17,7 @@ for sub_l1_root in total_l1_root:
     root_idx, hpo_list, n_concept, hpo2idx, idx2hpo = hpo_tree.getMaterial4L1(sub_l1_root)
     train_file_path=f"../models/train_source/train_{root_idx}.txt"
     model_save_path=f"../models/HPOModel_H/model_l1_{root_idx}.pkl"
-    device=torch.device("cuda:1") if torch.cuda.is_available() else torch.device("cpu")
+    device=torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
 
 

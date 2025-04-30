@@ -15,14 +15,23 @@ warnings.simplefilter("ignore", torch.serialization.SourceChangeWarning)
 os.environ['MKL_NUMTHREADS'] = "10"
 os.environ['OMP_NUMTHREADS'] = "10"
 
-clinical_ner_model = stanza.Pipeline('en', package='mimic', processors={'ner': 'i2b2'}, verbose=False)
+# clinical_ner_model = stanza.Pipeline('en', package='mimic', processors={'ner': 'i2b2'}, verbose=False)
+
+clinical_ner_model = stanza.Pipeline('en', 
+                                    processors={'ner': 'i2b2'}, 
+                                    verbose=False,
+                                    model_dir='../stanza-en',
+                                    download_method=stanza.DownloadMethod.NONE)
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 loader = ModelLoader()
 hpo_tree = HPOTree()
 hpo_tree.buildHPOTree()
 cnn_model = loader.load_all(cnn_model_path)
+cnn_model.to(device)
 bert_model = loader.load_all(bert_model_path)
+bert_model.to(device)
 fasttext_model = fasttext.load_model(fasttext_model_path)
-
 
 
 def annotate_text(text, output=None, param1=0.8, param2=0.6, param3=0.9, use_longest=True, use_step_3=True):
@@ -54,6 +63,7 @@ def get_L1_HPO_term(phrases_list, param1=0.8):
             input_data = [data["data"].float().to(device), data["seq_len"].int().to(device)]
             batch_num = input_data[0].size(0)
             y = cnn_model(input_data)
+            y = y.cpu()
             phrase_items = dataset.phrase_list[samples:samples + batch_num]
             samples += batch_num
             prediction = y.argsort().tolist()
@@ -91,6 +101,7 @@ def get_most_related_HPO_term(phrases_list, param1=0.8, param2=0.6, param3=0.9):
         sub_model_save_path = f"../models/HPOModel_H/model_l1_{root_idx}.pkl"
         loader = ModelLoader()
         sub_model = loader.load_all(sub_model_save_path)
+        sub_model.to(device)
         sub_model.eval()
         total_model.append(sub_model)
     for i, j in first_step:
@@ -100,6 +111,7 @@ def get_most_related_HPO_term(phrases_list, param1=0.8, param2=0.6, param3=0.9):
             for l1_hpo in j:
                 l1_idx = hpo_tree.getHPO2idx_l1(l1_hpo)
                 y_sub = total_model[l1_idx](PhraseDataSet4predictFunc(i, fasttext_model)).squeeze()
+                
                 if y_sub.size(0) > 10:
                     prediction_sub = y_sub.topk(10)[1].tolist()
                     scores_p_sub = torch.softmax(y_sub, dim=0).topk(10)[0].tolist()

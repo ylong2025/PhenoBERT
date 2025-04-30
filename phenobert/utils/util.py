@@ -21,7 +21,7 @@ stopwords_file_path = project_path + "../data/stopwords.txt"
 num2word_file_path = project_path + "../data/NUM.txt"
 cnn_model_path = project_path + "../models/HPOModel_H/model_layer1.pkl"
 bert_model_path = project_path + "../models/bert_model_max_triple.pkl"
-device = torch.device("cuda:1" if torch.cuda.is_available() else torch.device("cpu"))
+device = torch.device("cuda" if torch.cuda.is_available() else torch.device("cpu"))
 wnl = WordNetLemmatizer()
 
 class HPO_class:
@@ -175,7 +175,7 @@ def PhraseDataSet4predictFunc(phrase_item, fasttext_model, max_seq_len=30):
     data = np.concatenate([fasttext_model.get_word_vector(word).reshape(1, -1) for word in p_phrase])
     pad_data = np.zeros(shape=(max_seq_len, data.shape[1]))
     pad_data[:data.shape[0]] = data
-    return [torch.tensor(pad_data).unsqueeze(0).float().to(device), None]
+    return [torch.tensor(pad_data).to(device).unsqueeze(0).float(), None]
 
 
 class PhraseDataSet4trainBERT(Dataset):
@@ -760,7 +760,7 @@ def getSpliters():
     用于分割短句的分割词
     :return:
     """
-    spliters = set([word for word, pos in nltk.pos_tag(stopwords.words('english')) if pos in {'CC', 'WP', 'TO', 'WDT'}]+[',', '.', ':', ';', '(', ')', '[', ']', '/'])
+    spliters = set([word for word, pos in nltk.pos_tag(nltk.corpus.stopwords.words('english')) if pos in {'CC', 'WP', 'TO', 'WDT'}]+[',', '.', ':', ';', '(', ')', '[', ']', '/'])
     return spliters
 
 

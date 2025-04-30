@@ -1,5 +1,7 @@
+*.pt
 *.bin
 *.pkl
+*.zip
 
 *.txt
 *.json
